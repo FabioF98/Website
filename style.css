@@ -371,6 +371,9 @@ ul {
   font-family: "Space Mono", monospace;
 }
 
+.about-intro {
+  margin-bottom: 50px;
+}
 /* === TYPOGRAPHY === */
 .big-text {
   font-family: var(--font-heading);
