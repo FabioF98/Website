@@ -1,0 +1,53 @@
+# === macOS ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon?
+
+# === IDE e Editor ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# === Node.js (se mai lo userai) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# === Build e Output ===
+dist/
+build/
+out/
+.cache/
+*.log
+
+# === Environment e Secrets ===
+.env
+.env.local
+.env.*.local
+*.env
+config.local.js
+secrets.json
+
+# === Thumbnail e file temporanei ===
+Thumbs.db
+ehthumbs.db
+*.tmp
+*.temp
+*.bak
+
+# === Compressione ===
+*.zip
+*.tar.gz
+*.rar
