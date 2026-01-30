@@ -1,0 +1,1079 @@
+/* === COLOR PALETTE & FONTS === */
+/* Defined all colors as variables so I can easily update the theme later */
+:root {
+  --bg-color: #0a192f;
+  --sidebar-bg: #020c1b;
+  --text-color: #8892b0;
+  --heading-color: #ccd6f6;
+  --accent-color: #64ffda;  /* This teal color is used throughout for highlights */
+
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Space Grotesk", sans-serif;
+  --font-mono: "Fira Code", monospace;
+}
+
+/* === EASTER EGG - Windows 98 Retro Theme === */
+/* This was fun to build! Activated by clicking the dot in the logo */
+body.retro-mode {
+  background: #008080 !important;  /* Classic teal Windows background */
+  font-family: "MS Sans Serif", "Tahoma", sans-serif !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Scanline effect to make it look like an old CRT monitor */
+body.retro-mode::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  pointer-events: none;  /* Don't block clicks */
+  z-index: 99999;
+}
+
+body.retro-mode * {
+  font-family: "MS Sans Serif", "Tahoma", sans-serif !important;
+}
+
+/* Main container gets that classic gray Windows look */
+body.retro-mode .layout {
+  background: #c0c0c0 !important;
+  border: 3px outset #dfdfdf !important;
+  box-shadow: 2px 2px 0 #000 !important;
+}
+
+/* Sidebar becomes the classic Windows blue title bar */
+body.retro-mode .sidebar {
+  background: #000080 !important;
+  border-right: 3px solid #000 !important;
+}
+
+body.retro-mode .sidebar * {
+  color: #ffffff !important;
+}
+
+body.retro-mode .main-content {
+  background: #c0c0c0 !important;
+}
+
+/* Sections look like Windows dialog boxes */
+body.retro-mode .section {
+  background: #ffffff !important;
+  border: 2px inset #808080 !important;  /* Inset border for that pressed look */
+  padding: 20px !important;
+  margin: 15px !important;
+  box-shadow: none !important;
+}
+
+body.retro-mode h1, 
+body.retro-mode h2, 
+body.retro-mode h3, 
+body.retro-mode h4 {
+  color: #000080 !important;
+  text-shadow: 1px 1px 0 #c0c0c0 !important;
+}
+
+body.retro-mode p,
+body.retro-mode li,
+body.retro-mode a {
+  color: #000000 !important;
+}
+
+/* Buttons get that classic 3D raised look */
+body.retro-mode .btn-arrow,
+body.retro-mode .btn-submit,
+body.retro-mode button {
+  background: #c0c0c0 !important;
+  border: 2px outset #dfdfdf !important;
+  color: #000000 !important;
+  box-shadow: 1px 1px 0 #000 !important;
+  padding: 8px 16px !important;
+  font-weight: bold !important;
+}
+
+/* When clicked, buttons look pressed */
+body.retro-mode .btn-arrow:active,
+body.retro-mode .btn-submit:active,
+body.retro-mode button:active {
+  border-style: inset !important;
+}
+
+body.retro-mode .job-item,
+body.retro-mode .project-card,
+body.retro-mode .tech-card {
+  background: #ffffff !important;
+  border: 2px groove #808080 !important;
+  box-shadow: none !important;
+}
+
+body.retro-mode input,
+body.retro-mode textarea {
+  background: #ffffff !important;
+  border: 2px inset #808080 !important;
+  color: #000000 !important;
+}
+
+/* Hide custom cursor in retro mode */
+body.retro-mode .cursor-dot,
+body.retro-mode .cursor-outline {
+  display: none !important;
+}
+
+/* === GLOBAL RESETS === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;  /* Makes width calculations much easier */
+  cursor: none;  /* Hide default cursor (we have a custom one)  */
+}
+
+/* Show normal cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    cursor: auto !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;  /* Native smooth scrolling for browsers that support it */
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;  /* Prevent horizontal scroll */
+  transition: background-color 0.5s;
+}
+
+/* === CUSTOM CURSOR === */
+/* Two-part cursor: a small dot that follows instantly, and an outline with a delay */
+.cursor-dot,
+.cursor-outline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);  /* Center the cursor on the mouse position */
+  border-radius: 50%;
+  z-index: 9999;
+  pointer-events: none;  /* Don't block clicks on underlying elements */
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-color);
+}
+
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--accent-color);
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+/* Expand cursor when hovering over clickable elements */
+body.hovering .cursor-outline {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(100, 255, 218, 0.1);
+  border-color: transparent;
+}
+
+/* === MAIN LAYOUT === */
+/* Using CSS Grid for the two-column layout (sidebar + main content) */
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;  /* Fixed sidebar, flexible content */
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: 0.3s;
+  cursor: none;
+}
+
+/* Focus styles for keyboard navigation (important for accessibility!) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+ul {
+  list-style: none;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  background-color: var(--sidebar-bg);
+  height: 100vh;
+  position: sticky;  /* Stays in place while scrolling */
+  top: 0;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* Push header to top and footer to bottom */
+  border-right: 1px solid rgba(100, 255, 218, 0.1);
+  z-index: 100;
+}
+
+.sidebar-content header {
+  margin-bottom: 50px;
+}
+
+/* Profile Photo */
+.profile-photo-container {
+  margin-bottom: 20px;
+}
+
+.profile-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-photo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(100, 255, 218, 0.4);
+}
+
+.logo {
+  font-family: var(--font-heading);
+  color: var(--heading-color);
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+/* The dot in the logo that triggers the easter egg */
+.dot {
+  color: var(--accent-color);
+  cursor: pointer !important;
+  pointer-events: auto;  /* Make sure it's clickable despite cursor: none */
+  transition: transform 0.2s ease;
+}
+
+.dot:hover {
+  transform: scale(1.3);  /* Slight zoom on hover */
+}
+
+.role {
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+
+.nav-menu ul li {
+  margin-bottom: 15px;
+}
+
+.nav-menu a {
+  font-size: 1rem;
+  color: var(--text-color);
+  display: block;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Navigation links slide to the right on hover */
+.nav-menu a:hover,
+.nav-menu a.active {
+  color: var(--accent-color);
+  transform: translateX(10px);
+}
+
+/* Active link gets a "//" indicator */
+.nav-menu a.active::before {
+  content: "//";
+  position: absolute;
+  left: -20px;
+  color: var(--accent-color);
+}
+
+.social-links {
+  display: flex;
+  gap: 20px;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.social-links a {
+  color: var(--text-color);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-links a svg {
+  fill: currentColor;
+  transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+.social-links a:hover svg {
+  fill: var(--accent-color);
+  transform: translateY(-3px);
+}
+
+/* Social icons lift up slightly on hover */
+.social-links a:hover {
+  color: var(--accent-color);
+  transform: translateY(-3px);
+}
+
+.copyright {
+  font-size: 0.8rem;
+  opacity: 0.4;
+}
+
+/* === MAIN CONTENT AREA === */
+.main-content {
+  padding: 80px 10%;
+  width: 100%;
+}
+
+/* Sections start invisible and fade in when they enter viewport */
+.section {
+  margin-bottom: 150px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-label {
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "Space Mono", monospace;
+}
+
+/* === TYPOGRAPHY === */
+.big-text {
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  line-height: 1.1;
+  margin-bottom: 30px;
+  color: var(--heading-color);
+}
+
+.highlight {
+  color: var(--accent-color);
+  position: relative;
+  display: inline-block;
+}
+
+/* Highlighted text gets a subtle background bar */
+.highlight::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 10px;
+  bottom: 5px;
+  left: 0;
+  background: rgba(100, 255, 218, 0.2);
+  z-index: -1;
+}
+
+.hero-sub {
+  font-size: 1.2rem;
+  max-width: 500px;
+  margin-bottom: 40px;
+}
+
+.btn-arrow {
+  font-size: 1rem;
+  border-bottom: 1px solid var(--accent-color);
+  padding-bottom: 5px;
+  color: var(--accent-color);
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.btn-arrow:hover {
+  padding-left: 10px;  /* Slides to the right on hover */
+}
+
+/* === SOFT SKILLS SECTION === */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  margin-top: 50px;
+  border-top: 1px solid rgba(100, 255, 218, 0.1);
+  padding-top: 40px;
+}
+
+.num {
+  display: block;
+  color: var(--accent-color);
+  font-family: "Space Mono", monospace;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.feature-item h4 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: var(--heading-color);
+}
+
+/* === EXPERIENCE SECTION === */
+/* Two-column grid: dates on left, job details on right */
+.job-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  margin-bottom: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+}
+
+.job-item:last-child {
+  border-bottom: none;
+}
+
+.period {
+  font-family: "Space Mono", monospace;
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.company {
+  display: block;
+  color: var(--heading-color);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.location {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  margin-top: 5px;
+}
+
+.job-details h4 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: var(--accent-color);
+}
+
+/* Added some breathing room between description and bullets */
+.job-desc {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.job-achievements {
+  margin-top: 15px;
+}
+
+.job-achievements li {
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 20px;
+  font-size: 0.95rem;
+}
+
+/* Custom bullet point using a triangle */
+.job-achievements li::before {
+  content: "▹";
+  color: var(--accent-color);
+  position: absolute;
+  left: 0;
+}
+
+/* === PROJECTS SECTION === */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.project-card {
+  background: #112240;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Cards lift up on hover */
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+}
+
+.project-image {
+  height: 200px;
+  overflow: hidden;
+}
+
+.img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.project-content {
+  padding: 25px;
+}
+
+.project-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.folder-icon {
+  color: var(--accent-color);
+  font-size: 1.5rem;
+}
+
+.project-links a {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  margin-left: 15px;
+  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.project-links a svg {
+  transition: transform 0.3s ease;
+}
+
+.project-links a:hover {
+  color: var(--accent-color);
+}
+
+.project-links a:hover svg {
+  transform: translateY(-2px);
+}
+
+.project-card h4 {
+  color: var(--heading-color);
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.project-card p {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 0.8rem;
+  font-family: "Space Mono", monospace;
+  color: var(--accent-color);
+}
+
+/* === SKILLS SECTION === */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.tech-card {
+  background: #112240;
+  padding: 30px;
+  border-radius: 4px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+}
+
+/* Animated line that appears on top of card when hovering */
+.tech-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.tech-card:hover::before {
+  transform: scaleX(1);
+}
+
+.card-icon {
+  font-size: 2rem;
+  color: var(--accent-color);
+  margin-bottom: 15px;
+}
+
+.tech-card h5 {
+  color: var(--heading-color);
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* === CONTACT SECTION === */
+.contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+}
+
+.contact-info h2 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: var(--heading-color);
+  margin-bottom: 20px;
+}
+
+.email-link {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  border-bottom: 1px solid var(--accent-color);
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
+
+.email-link:hover {
+  color: var(--heading-color);
+  border-color: var(--heading-color);
+}
+
+.contact-form {
+  background: #112240;
+  padding: 40px;
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--heading-color);
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background: #0a192f;
+  border: 1px solid #233554;
+  padding: 12px;
+  color: var(--heading-color);
+  font-family: var(--font-body);
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--accent-color);
+}
+
+/* Error state - red border */
+.form-group.error input,
+.form-group.error textarea {
+  border-color: #ff6b6b;
+}
+
+/* Success state - green border */
+.form-group.success input,
+.form-group.success textarea {
+  border-color: var(--accent-color);
+}
+
+.error-msg {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  display: none;  /* Hidden by default, shown when error class is added */
+}
+
+.form-group.error .error-msg {
+  display: block;
+  animation: fadeIn 0.3s;
+}
+
+.btn-submit {
+  background: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 12px 25px;
+  font-family: "Space Mono", monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.btn-submit:hover {
+  background: rgba(100, 255, 218, 0.1);
+}
+
+.form-feedback {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-footer {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.5;
+  padding: 20px 0;
+}
+
+/* Accessibility: Skip link for keyboard users */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1em;
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  text-decoration: none;
+}
+
+.skip-to-main:focus {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1em;
+}
+
+/* === RESPONSIVE DESIGN === */
+/* Mobile devices */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;  /* Single column on mobile */
+  }
+  
+  .sidebar {
+    height: auto;
+    position: relative;  /* No longer sticky on mobile */
+    padding: 30px 20px;
+    text-align: center;
+    border-right: none;
+    border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+  }
+  
+  /* Center profile photo on mobile */
+  .profile-photo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .nav-menu {
+    display: block;
+    margin: 20px 0;
+  }
+  
+  /* Horizontal nav menu on mobile */
+  .nav-menu ul {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .nav-menu a.active::before {
+    display: none;  /* Remove the "//" indicator on mobile */
+  }
+  
+  .main-content {
+    padding: 40px 20px;
+  }
+  
+  .big-text {
+    font-size: 2.2rem;  /* Smaller heading on mobile */
+  }
+  
+  /* All grids become single column on mobile */
+  .job-item,
+  .contact-wrapper,
+  .tech-grid,
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  /* No custom cursor on mobile */
+  .cursor-dot,
+  .cursor-outline {
+    display: none;
+  }
+  
+  * {
+    cursor: auto;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* Tablet devices */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .layout {
+    grid-template-columns: 250px 1fr;  /* Narrower sidebar on tablets */
+  }
+  
+  .sidebar {
+    padding: 40px 30px;
+  }
+  
+  .logo {
+    font-size: 2rem;
+  }
+  
+  .main-content {
+    padding: 60px 8%;
+  }
+  
+  .big-text {
+    font-size: 3rem;
+  }
+}
+
+/* Print styles - for when someone wants to print the resume */
+@media print {
+  .cursor-dot,
+  .cursor-outline,
+  .social-links,
+  .btn-arrow,
+  .btn-submit {
+    display: none;  /* Hide interactive elements when printing */
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .sidebar {
+    position: relative;
+    height: auto;
+  }
+  
+  /* Avoid breaking sections across pages */
+  .section {
+    page-break-inside: avoid;
+  }
+}
+
+/* === FLOATING ACTION BUTTON (FAB) === */
+/* Quick contact button that stays visible during scroll */
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  background: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 
+    0 4px 12px rgba(100, 255, 218, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(100px) scale(0.8);
+  pointer-events: none;
+}
+
+/* FAB appears with smooth animation after scrolling a bit */
+.fab.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Hide FAB when in contact section (no need for it there) */
+.fab.hidden {
+  opacity: 0;
+  transform: translateY(100px) scale(0.8);
+  pointer-events: none;
+}
+
+/* Hover effects */
+.fab:hover {
+  background: var(--heading-color);
+  box-shadow: 
+    0 6px 20px rgba(100, 255, 218, 0.5),
+    0 3px 6px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px) scale(1.05);
+}
+
+.fab:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* Pulse animation to draw attention */
+.fab::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--accent-color);
+  transform: translate(-50%, -50%);
+  animation: fab-pulse 2s infinite;
+  opacity: 0;
+}
+
+@keyframes fab-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Icon animation on hover */
+.fab i {
+  transition: transform 0.3s ease;
+}
+
+.fab:hover i {
+  transform: scale(1.1);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .fab {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 52px;
+    height: 52px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .fab {
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Retro mode styling for FAB */
+body.retro-mode .fab {
+  background: #000080;
+  color: #ffffff;
+  border: 2px outset #dfdfdf;
+  border-radius: 0;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+body.retro-mode .fab:hover {
+  background: #000066;
+  border: 2px inset #dfdfdf;
+}
+
+body.retro-mode .fab::before {
+  display: none;
+}
+
+/* Respect user's motion preferences (important for accessibility!) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .fab::before {
+    animation: none !important;
+  }
+}
