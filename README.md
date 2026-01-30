@@ -141,4 +141,4 @@ Click the dot after my name in the logo to activate a retro Windows 98 theme for
 
 
 
-**Built with ❤️ using vanilla HTML, CSS, and JavaScript**
+**Built using vanilla HTML, CSS, and JavaScript**
